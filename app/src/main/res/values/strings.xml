@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MovieNepal</string>
+    <string name="text_no_internet">"No Internet!!!
+        Please Check our internet connection"</string>
 </resources>
