@@ -1,4 +1,4 @@
-package com.rajan.movienepal.model.movie;
+package com.rajan.movienepal.model;
 
 public class ApiError {
     private int status;

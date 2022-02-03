@@ -4,14 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rajan.movienepal.adapter.MovieRecyclerViewAdapter;
+import com.rajan.movienepal.callbacks.MovieCallBacks;
 import com.rajan.movienepal.controller.movie.MovieController;
 import com.rajan.movienepal.model.movie.MovieModel;
 import com.rajan.movienepal.utility.AppUtil;
@@ -23,8 +26,8 @@ public class MovieActivity extends AppCompatActivity implements IMovieView {
 
     //views
     RecyclerView movieRecyclerView;
-    ProgressBar progressBar;
-    TextView textViewErrorSpeech;
+    RelativeLayout progressBar;
+    RelativeLayout noInternet;
 
     //controller
     MovieController movieController;
@@ -44,8 +47,8 @@ public class MovieActivity extends AppCompatActivity implements IMovieView {
 
         //initializing views
         movieRecyclerView = findViewById(R.id.rv_movie);
-        progressBar = findViewById(R.id.progressBar);
-        textViewErrorSpeech = findViewById(R.id.textViewErrorSpeech);
+        progressBar = findViewById(R.id.rl_progressBar);
+        noInternet = findViewById(R.id.rl_no_internet);
 
         //adapter
         movieRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -58,7 +61,7 @@ public class MovieActivity extends AppCompatActivity implements IMovieView {
             movieController.getAllMovies();
         } else {
             movieRecyclerView.setVisibility(View.INVISIBLE);
-            textViewErrorSpeech.setVisibility(View.VISIBLE);
+            noInternet.setVisibility(View.VISIBLE);
         }
     }
 
@@ -66,10 +69,18 @@ public class MovieActivity extends AppCompatActivity implements IMovieView {
     public void onSucces(ArrayList<MovieModel.Result> movieList) {
         if (!movieList.isEmpty()) {
             progressBar.setVisibility(View.INVISIBLE);
-            movieAdapter = new MovieRecyclerViewAdapter(this);
+            movieAdapter = new MovieRecyclerViewAdapter(this, new MovieCallBacks() {
+                @Override
+                public void movieItemClicked(MovieModel.Result movie) {
+                    Intent detailIntent = new Intent(MovieActivity.this, MovieDetailActivity.class);
+                    detailIntent.putExtra(MovieDetailActivity.MOVIE_ID, String.valueOf(movie.getId()));
+                    startActivity(detailIntent);
+                }
+            });
             movieAdapter.addMovie(movieList);
             movieRecyclerView.setAdapter(movieAdapter);
 
+            //blinking animation for item loading in recycler view
             final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_blink);
             movieRecyclerView.setLayoutAnimation(controller);
             movieAdapter.notifyDataSetChanged();

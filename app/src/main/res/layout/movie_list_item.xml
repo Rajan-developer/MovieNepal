@@ -8,6 +8,7 @@
     android:background="@android:color/transparent">
 
     <RelativeLayout
+        android:id="@+id/rl_movieItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/rectangle_top_corner_round">
@@ -18,11 +19,12 @@
             android:layout_width="wrap_content"
             android:layout_height="170dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/movie"
+            android:src="@drawable/image_not_found"
             app:riv_corner_radius_top_left="10dp"
             app:riv_corner_radius_top_right="10dp" />
 
         <TextView
+            android:id="@+id/tv_movieName"
             android:paddingVertical="5dp"
             android:paddingRight="5dp"
             android:paddingLeft="2dp"

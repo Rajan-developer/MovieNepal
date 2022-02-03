@@ -1,7 +1,7 @@
 package com.rajan.movienepal.utility;
 
 
-import com.rajan.movienepal.model.movie.ApiError;
+import com.rajan.movienepal.model.ApiError;
 import com.rajan.movienepal.retrofit.ApiClient;
 
 import java.io.IOException;

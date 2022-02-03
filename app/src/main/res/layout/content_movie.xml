@@ -51,29 +51,9 @@
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:indeterminateTint="@color/missionYellow"
-        android:layout_gravity="center|center_horizontal|center_vertical"
-        android:visibility="gone" />
+    <include layout="@layout/progressbar"></include>
 
-    <TextView
-        android:id="@+id/textViewErrorSpeech"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center|center_horizontal|center_vertical"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:gravity="center"
-        android:text="@string/text_no_internet"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:visibility="gone" />
+    <include layout="@layout/no_internet_layout"></include>
 
 
 </RelativeLayout>

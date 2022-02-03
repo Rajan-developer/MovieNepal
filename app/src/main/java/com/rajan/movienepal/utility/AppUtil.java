@@ -73,4 +73,71 @@ public class AppUtil {
         }
     }
 
+    public static void DateConverter(String date) {
+
+        int firstDashPos = date.indexOf("-");
+        int secondDashIndex = date.lastIndexOf("-");
+        String day = date.substring(secondDashIndex, date.length());
+        String month = date.substring(firstDashPos, secondDashIndex);
+        String year = date.substring(0, firstDashPos);
+        AppLog.showLog("DAY : ", day);
+        AppLog.showLog("Month : ", month);
+        AppLog.showLog("Year : ", year);
+    }
+
+    public static String DayConverter(int day) {
+        String newDay;
+        if (day < 10) newDay = "0" + day;
+        else newDay = String.valueOf(day);
+
+        return newDay;
+    }
+
+    public static String MonthConverter(int month) {
+        String newMonth;
+        switch (month) {
+            case 1:
+                newMonth = "Jan";
+                break;
+            case 2:
+                newMonth = "Feb";
+                break;
+            case 3:
+                newMonth = "Mar";
+                break;
+            case 4:
+                newMonth = "Apr";
+                break;
+            case 5:
+                newMonth = "May";
+                break;
+            case 6:
+                newMonth = "Jun";
+                break;
+            case 7:
+                newMonth = "Jul";
+                break;
+            case 8:
+                newMonth = "Aug";
+                break;
+            case 9:
+                newMonth = "Sep";
+                break;
+            case 10:
+                newMonth = "Oct";
+                break;
+            case 11:
+                newMonth = "Nov";
+                break;
+            case 12:
+                newMonth = "Dec";
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + month);
+        }
+
+        return newMonth;
+    }
+
+
 }
