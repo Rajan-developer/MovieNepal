@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,7 +28,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         this.mContext = mContext;
     }
 
-    public void addMovie(ArrayList<String> list) {
+    public void addImages(ArrayList<String> list) {
         this.imageList.addAll(list);
     }
 
@@ -50,7 +51,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        RoundedImageView movieImage;
+        ImageView movieImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -73,16 +73,20 @@ public class AppUtil {
         }
     }
 
-    public static void DateConverter(String date) {
+    //convert the date yy-mm-dd format to 22 Jan 20121 format
+    public static String DateConverter(String date) {
 
         int firstDashPos = date.indexOf("-");
         int secondDashIndex = date.lastIndexOf("-");
-        String day = date.substring(secondDashIndex, date.length());
-        String month = date.substring(firstDashPos, secondDashIndex);
+        String day = date.substring(secondDashIndex + 1, date.length());
+        String month = date.substring(firstDashPos + 1, secondDashIndex);
         String year = date.substring(0, firstDashPos);
-        AppLog.showLog("DAY : ", day);
-        AppLog.showLog("Month : ", month);
-        AppLog.showLog("Year : ", year);
+
+        day = DayConverter(Integer.valueOf(day));
+        month = MonthConverter(Integer.valueOf(month));
+
+        return day + " " + month + ", " + year;
+
     }
 
     public static String DayConverter(int day) {
@@ -139,5 +143,17 @@ public class AppUtil {
         return newMonth;
     }
 
+
+    //convert video run time to ..hr ..min
+    public static String timeConverter(long movieRunTime) {
+        String timeInterval = "";
+
+        String hour = String.valueOf(movieRunTime / 60) + " hr";
+        String min = String.valueOf(movieRunTime % 60) + " mins";
+
+
+        return timeInterval = hour + " " + min;
+
+    }
 
 }

@@ -7,6 +7,7 @@ public class MovieDetailModel {
     private int id;
     private String title;
     private String release_date;
+    private long runtime;
     private double vote_average;
     private String overview;
     private String backdrop_path;
@@ -40,6 +41,14 @@ public class MovieDetailModel {
 
     public void setRelease_date(String release_date) {
         this.release_date = release_date;
+    }
+
+    public long getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(long runtime) {
+        this.runtime = runtime;
     }
 
     public double getVote_average() {

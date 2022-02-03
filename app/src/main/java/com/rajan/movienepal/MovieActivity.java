@@ -54,7 +54,7 @@ public class MovieActivity extends AppCompatActivity implements IMovieView {
         movieRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
         //controller
-        movieController = new MovieController(this);
+        movieController = new MovieController(this, MovieActivity.this);
 
         if (AppUtil.isInternetConnectionAvailable(this)) {
             progressBar.setVisibility(View.VISIBLE);
@@ -62,12 +62,39 @@ public class MovieActivity extends AppCompatActivity implements IMovieView {
         } else {
             movieRecyclerView.setVisibility(View.INVISIBLE);
             noInternet.setVisibility(View.VISIBLE);
+            movieController.getAllMoviesFromDataBase();
         }
     }
 
     @Override
     public void onSucces(ArrayList<MovieModel.Result> movieList) {
         if (!movieList.isEmpty()) {
+            progressBar.setVisibility(View.INVISIBLE);
+            movieAdapter = new MovieRecyclerViewAdapter(this, new MovieCallBacks() {
+                @Override
+                public void movieItemClicked(MovieModel.Result movie) {
+                    Intent detailIntent = new Intent(MovieActivity.this, MovieDetailActivity.class);
+                    detailIntent.putExtra(MovieDetailActivity.MOVIE_ID, String.valueOf(movie.getId()));
+                    startActivity(detailIntent);
+                }
+            });
+            movieAdapter.addMovie(movieList);
+            movieRecyclerView.setAdapter(movieAdapter);
+
+            //blinking animation for item loading in recycler view
+            final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_blink);
+            movieRecyclerView.setLayoutAnimation(controller);
+            movieAdapter.notifyDataSetChanged();
+            movieRecyclerView.scheduleLayoutAnimation();
+        }
+    }
+
+    @Override
+    public void onOffLineDataSuccess(ArrayList<MovieModel.Result> movieList) {
+        if (!movieList.isEmpty()) {
+            AppUtil.showSnackBar(movieRecyclerView,this,getString(R.string.off_line_mode));
+            movieRecyclerView.setVisibility(View.VISIBLE);
+            noInternet.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
             movieAdapter = new MovieRecyclerViewAdapter(this, new MovieCallBacks() {
                 @Override

@@ -9,4 +9,6 @@ public interface IMovieView {
     void onSucces(ArrayList<MovieModel.Result> movieList);
 
     void onFail(String message);
+
+    void onOffLineDataSuccess(ArrayList<MovieModel.Result> movieList);
 }

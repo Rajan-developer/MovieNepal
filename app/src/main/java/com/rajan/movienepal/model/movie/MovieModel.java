@@ -37,7 +37,7 @@ public class MovieModel {
     }
 
 
-    public class Result {
+    public static class Result {
         private long id;
         private String title;
         private String release_date;

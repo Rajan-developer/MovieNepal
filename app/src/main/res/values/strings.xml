@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">MovieNepal</string>
-    <string name="text_no_internet">"No Internet!!!
-        Please Check our internet connection"</string>
+    <string name="text_no_internet">"No Internet  !!!
+        Please Check your internet connection"</string>
+    <string name="off_line_mode">Offline Mode</string>
+    <string name="latest_movies">Latest Movies</string>
+    <string name="overView">OverView</string>
+    <string name="collection">Collection</string>
+    <string name="production_company">Production Company</string>
+    <string name="production_country">Production Country</string>
 </resources>

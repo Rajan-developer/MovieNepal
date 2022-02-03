@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="1"
-        android:padding="10dp">
+        android:weightSum="1">
 
 
         <RelativeLayout
@@ -22,12 +21,23 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.6">
+            android:layout_weight="0.6"
+            android:padding="10dp">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+
+                <TextView
+                    android:id="@+id/tv_movieName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:text="American Boys"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"></TextView>
 
                 <include layout="@layout/detail_moview_list_item"></include>
 
@@ -41,7 +51,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="OverView"
+                        android:text="@string/overView"
                         android:textColor="@color/white"
                         android:textSize="20sp"></TextView>
 
@@ -50,7 +60,8 @@
                         android:id="@+id/tv_movieOverView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man"
+                        android:justificationMode="inter_word"
+                        android:text=""
                         android:textColor="@color/white"
                         android:textSize="14sp"></TextView>
 
@@ -58,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Collection"
+                        android:text="@string/collection"
                         android:textColor="@color/white"
                         android:textSize="20sp"></TextView>
 
@@ -67,7 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
-                        android:text="Spider-Man (Avengers) Collection"
+                        android:text=""
                         android:textColor="@color/white"
                         android:textSize="14sp"></TextView>
 
@@ -75,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Production Company"
+                        android:text="@string/production_company"
                         android:textColor="@color/white"
                         android:textSize="20sp"></TextView>
 
@@ -84,15 +95,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
-                        android:text="Marvel Studios"
+                        android:text=""
                         android:textColor="@color/white"
                         android:textSize="14sp"></TextView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Production Country"
+                        android:text="@string/production_country"
                         android:textColor="@color/white"
                         android:textSize="20sp"></TextView>
 
@@ -101,14 +111,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
-                        android:text="United States of America"
+                        android:text=""
                         android:textColor="@color/white"
                         android:textSize="14sp"></TextView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Related Images"
                         android:textColor="@color/white"
                         android:textSize="20sp"></TextView>
@@ -120,7 +130,7 @@
 
                 </LinearLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
 
@@ -129,8 +139,6 @@
     <include layout="@layout/progressbar"></include>
 
     <include layout="@layout/no_internet_layout"></include>
-
-
 
 
 </RelativeLayout>

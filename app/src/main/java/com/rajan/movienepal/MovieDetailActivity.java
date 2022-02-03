@@ -1,6 +1,7 @@
 package com.rajan.movienepal;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -14,10 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.rajan.movienepal.adapter.ImageRecyclerViewAdapter;
 import com.rajan.movienepal.controller.movie.MovieController;
+import com.rajan.movienepal.database.entity.Movie;
 import com.rajan.movienepal.model.movie.MovieDetailModel;
+import com.rajan.movienepal.utility.AppText;
 import com.rajan.movienepal.utility.AppUtil;
 import com.rajan.movienepal.view.IMovieDetailView;
+
+import java.util.ArrayList;
 
 public class MovieDetailActivity extends AppCompatActivity implements IMovieDetailView {
 
@@ -37,6 +44,7 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
     MovieController movieController;
 
     //Adapter
+    ImageRecyclerViewAdapter imageRecyclerViewAdapter;
 
 
     @Override
@@ -47,20 +55,17 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
         //get movie id
         intent = getIntent();
         movieId = intent.getStringExtra(MOVIE_ID);
-        Toast.makeText(this, movieId, Toast.LENGTH_SHORT).show();
 
         //initializing views
         intiView();
 
         //controller
-        movieController = new MovieController(this);
+        movieController = new MovieController(this, MovieDetailActivity.this);
 
 
         //adapter
         movieImageRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        //controller
-        movieController = new MovieController(this);
 
         if (AppUtil.isInternetConnectionAvailable(this)) {
             progressBar.setVisibility(View.VISIBLE);
@@ -68,6 +73,7 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
         } else {
             movieImageRecyclerView.setVisibility(View.INVISIBLE);
             noInternet.setVisibility(View.VISIBLE);
+            movieController.getMovieFromDataBase(movieId);
         }
 
 
@@ -94,17 +100,102 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
     public void onSucces(MovieDetailModel movieDetail) {
         //set values in the UI of movie
         progressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(this, movieDetail.getBelongs_to_collection().getName(), Toast.LENGTH_SHORT).show();
+
+        ArrayList<String> imagePaths = new ArrayList<>();
+        imagePaths.add(movieDetail.getBackdrop_path());
+        imagePaths.add(movieDetail.getPoster_path());
+
+
         movieName.setText(movieDetail.getTitle());
+        Glide.with(this)
+                .load(AppText.IMAGE_URL + movieDetail.getPoster_path())
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_not_found)
+                .into(movieImage);
+
 
         //get multiple generas from list
         String genre = "";
-        for(int i = 0; i< movieDetail.getGenres().size(); i++){
+        for (int i = 0; i < movieDetail.getGenres().size(); i++) {
             genre = genre + movieDetail.getGenres().get(i).getName() + ", ";
         }
         movieGeneres.setText(genre);
+        movieReleaseDate.setText(AppUtil.DateConverter(movieDetail.getRelease_date()));
+        movieTimeInterval.setText(AppUtil.timeConverter(movieDetail.getRuntime()));
+        movieRating.setText(String.valueOf(movieDetail.getVote_average()));
+        movieOverView.setText(movieDetail.getOverview());
 
-        AppUtil.DateConverter(movieDetail.getRelease_date());
+        String belongsToCollection = "";
+        try {
+            belongsToCollection = movieDetail.getBelongs_to_collection().getName();
+            movieCollection.setText(belongsToCollection);
+            imagePaths.add(movieDetail.getBelongs_to_collection().getPoster_path());
+            imagePaths.add(movieDetail.getBelongs_to_collection().getBackdrop_path());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            movieCollection.setText("No collection");
+        }
+
+
+        String productionCompany = "";
+        for (int i = 0; i < movieDetail.getProduction_companies().size(); i++) {
+            productionCompany = productionCompany + movieDetail.getProduction_companies().get(i).getName() + "\n";
+        }
+        movieProductionCompany.setText(productionCompany);
+
+
+        String productionCountry = "";
+        for (int i = 0; i < movieDetail.getProduction_countries().size(); i++) {
+            productionCountry = productionCountry + movieDetail.getProduction_countries().get(i).getName() + "\n";
+        }
+        movieProductionCountry.setText(productionCountry);
+
+        //related images of the movie
+        imageRecyclerViewAdapter = new ImageRecyclerViewAdapter(this);
+        imageRecyclerViewAdapter.addImages(imagePaths);
+        movieImageRecyclerView.setAdapter(imageRecyclerViewAdapter);
+
+        //update the value on table when online
+        movieController.UpdateMovieToDataBase(
+                movieId,
+                genre,
+                AppUtil.DateConverter(movieDetail.getRelease_date()),
+                AppUtil.timeConverter(movieDetail.getRuntime()),
+                belongsToCollection,
+                productionCompany,
+                productionCountry,
+                movieDetail.getHomepage()
+        );
+
+    }
+
+    @Override
+    public void onOffLineDataSuccess(Movie movie) {
+
+        if (movie.getStatus()) {
+            AppUtil.showSnackBar(movieImageRecyclerView, this, getString(R.string.off_line_mode));
+            noInternet.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        } else {
+            noInternet.setVisibility(View.VISIBLE);
+        }
+
+        movieName.setText(movie.getTitle());
+        /*Glide.with(this)
+                .load(AppText.IMAGE_URL + movieDetail.getPoster_path())
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_not_found)
+                .into(movieImage);*/
+
+
+        movieGeneres.setText(movie.getGenres());
+        movieReleaseDate.setText(movie.getRelease_date());
+        movieTimeInterval.setText(movie.getDuration());
+        movieRating.setText(String.valueOf(movie.getVote_average()));
+        movieOverView.setText(movie.getOverview());
+        movieCollection.setText(movie.getBelongs_to_collection());
+        movieProductionCompany.setText(movie.getProduction_companies());
+        movieProductionCountry.setText(movie.getProduction_countries());
     }
 
     @Override
