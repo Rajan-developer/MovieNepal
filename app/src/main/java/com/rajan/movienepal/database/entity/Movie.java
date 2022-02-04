@@ -50,6 +50,12 @@ public class Movie {
     @ColumnInfo(name = "production_countries")
     private String production_countries;
 
+    @ColumnInfo(name = "collection_poster_path")
+    private String collection_poster_path;
+
+    @ColumnInfo(name = "collection_backdrop_path")
+    private String collection_dropback_path;
+
     @ColumnInfo(name = "status")
     private Boolean status = false;
 
@@ -164,6 +170,22 @@ public class Movie {
 
     public void setProduction_countries(String production_countries) {
         this.production_countries = production_countries;
+    }
+
+    public String getCollection_poster_path() {
+        return collection_poster_path;
+    }
+
+    public void setCollection_poster_path(String collection_poster_path) {
+        this.collection_poster_path = collection_poster_path;
+    }
+
+    public String getCollection_dropback_path() {
+        return collection_dropback_path;
+    }
+
+    public void setCollection_dropback_path(String collection_dropback_path) {
+        this.collection_dropback_path = collection_dropback_path;
     }
 
     public Boolean getStatus() {

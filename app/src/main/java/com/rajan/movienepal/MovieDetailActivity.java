@@ -72,6 +72,8 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
     ImageView backPress;
     FrameLayout playerFrameLayout, movieFrameLayout;
     TextView cannotPlayVideo;
+    RelativeLayout rlCannotPlay;
+    ImageView imageCannotPlay;
     ImageView movieImage;
     TextView movieName, movieGeneres, movieReleaseDate, movieTimeInterval, movieRating, movieOverView, movieCollection, movieProductionCompany, movieProductionCountry;
     RecyclerView movieImageRecyclerView;
@@ -126,8 +128,8 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
             progressBar.setVisibility(View.VISIBLE);
             movieController.getMovieDetail(movieId);
         } else {
-            cannotPlayVideo.setVisibility(View.VISIBLE);
-            movieImageRecyclerView.setVisibility(View.INVISIBLE);
+            //show cannot play UI when offline
+            rlCannotPlay.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.VISIBLE);
             movieController.getMovieFromDataBase(movieId);
         }
@@ -139,6 +141,8 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
         backPress = findViewById(R.id.back_pressed);
         playerFrameLayout = findViewById(R.id.playerFrameLayout);
         movieFrameLayout = findViewById(R.id.movieFrameLayout);
+        rlCannotPlay = findViewById(R.id.rl_cannot_play);
+        imageCannotPlay = findViewById(R.id.iv_cannot_play);
         movieImage = findViewById(R.id.iv_detail_movie);
         movieName = findViewById(R.id.tv_movieName);
         movieGeneres = findViewById(R.id.tv_movieGeneres);
@@ -156,7 +160,7 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
 
         //initializing views for exo player
         cannotPlayVideo = findViewById(R.id.tv_cannotPlay);
-        cannotPlayVideo.setVisibility(View.GONE);
+        rlCannotPlay.setVisibility(View.GONE);
         playerView = findViewById(R.id.player_view);
         playerProgressBar = findViewById(R.id.progressBar);
         btnFullScreen = findViewById(R.id.btn_fullscreen);
@@ -166,7 +170,7 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
         Uri videoUrl = Uri.parse("https://i.imgur.com/7bMqysJ.mp4");
         //Uri videoUrl = Uri.parse("https://www.youtube.com/watch?v=JfVOs4VSpmA");
         // Uri videoUrl = Uri.parse("https://storage.googleapis.com/exoplayer-test-media-0/play.mp3");
-         //Uri videoUrl = Uri.parse(" https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4");
+        //Uri videoUrl = Uri.parse(" https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4");
 
         //initialize load control
         LoadControl loadControl = new DefaultLoadControl();
@@ -221,7 +225,7 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                 //check condition
-                 if (playbackState == Player.STATE_READY) {
+                if (playbackState == Player.STATE_READY) {
                     //when ready
                     //Hide progree bar
                     playerProgressBar.setVisibility(View.GONE);
@@ -233,7 +237,7 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
                     //when ready
                     //Hide progree bar
                     playerProgressBar.setVisibility(View.GONE);
-                }else{
+                } else {
                     //when buffering
                     //show progress bar
                     playerProgressBar.setVisibility(View.VISIBLE);
@@ -337,11 +341,14 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
         movieOverView.setText(movieDetail.getOverview());
 
         String belongsToCollection = "";
+        String belongsPosterPath = "";
+        String belongsBackDropPath = "";
         try {
             belongsToCollection = movieDetail.getBelongs_to_collection().getName();
             movieCollection.setText(belongsToCollection);
             imagePaths.add(movieDetail.getBelongs_to_collection().getPoster_path());
             imagePaths.add(movieDetail.getBelongs_to_collection().getBackdrop_path());
+
         } catch (NullPointerException e) {
             e.printStackTrace();
             movieCollection.setText("No collection");
@@ -375,6 +382,8 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
                 belongsToCollection,
                 productionCompany,
                 productionCountry,
+                belongsPosterPath,
+                belongsBackDropPath,
                 movieDetail.getHomepage()
         );
 
@@ -383,6 +392,35 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
     @Override
     public void onOffLineDataSuccess(Movie movie) {
 
+        //load image instead of player when offline
+        Glide.with(this)
+                .load(AppText.IMAGE_URL + movie.getBackdrop_path())
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_not_found)
+                .into(imageCannotPlay);
+
+        //creating the list of images if not empty
+        ArrayList<String> imagePaths = new ArrayList<>();
+        if (!movie.getBackdrop_path().isEmpty()) imagePaths.add(movie.getBackdrop_path());
+        if (!movie.getPoster_path().isEmpty()) imagePaths.add(movie.getPoster_path());
+
+        //handling null pointer if the image not found
+        try {
+            if (!movie.getCollection_poster_path().isEmpty())
+                imagePaths.add(movie.getCollection_poster_path());
+            if (!movie.getCollection_dropback_path().isEmpty())
+                imagePaths.add(movie.getCollection_dropback_path());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        //related images of the movie
+        imageRecyclerViewAdapter = new ImageRecyclerViewAdapter(this);
+        imageRecyclerViewAdapter.addImages(imagePaths);
+        movieImageRecyclerView.setAdapter(imageRecyclerViewAdapter);
+
+
+        //if the detail of movie is not saved in database then just display no internet msg
         if (movie.getStatus()) {
             AppUtil.showSnackBar(movieImageRecyclerView, this, getString(R.string.off_line_mode));
             noInternet.setVisibility(View.INVISIBLE);
@@ -391,12 +429,13 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
             noInternet.setVisibility(View.VISIBLE);
         }
 
+        //set values to UI
         movieName.setText(movie.getTitle());
-        /*Glide.with(this)
-                .load(AppText.IMAGE_URL + movieDetail.getPoster_path())
+        Glide.with(this)
+                .load(AppText.IMAGE_URL + movie.getPoster_path())
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_not_found)
-                .into(movieImage);*/
+                .into(movieImage);
 
 
         movieGeneres.setText(movie.getGenres());

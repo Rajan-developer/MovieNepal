@@ -168,7 +168,9 @@ public class MovieController implements IMovieController {
     }
 
     @Override
-    public void UpdateMovieToDataBase(String movieId, String genre, String releasedDate, String duration, String collection, String prodCompany, String prodCountry, String homePageLink) {
+    public void UpdateMovieToDataBase(String movieId, String genre, String releasedDate,
+                                      String duration, String collection, String prodCompany, String prodCountry,
+                                      String posterPath,String backDropPath,String homePageLink) {
 
         class UpdateMovie extends AsyncTask<Void, Void, Void> {
 
@@ -188,6 +190,8 @@ public class MovieController implements IMovieController {
                 movie.setBelongs_to_collection(collection);
                 movie.setProduction_companies(prodCompany);
                 movie.setProduction_countries(prodCountry);
+                movie.setCollection_poster_path(posterPath);
+                movie.setCollection_dropback_path(backDropPath);
                 movie.setHomepage(homePageLink);
                 movie.setStatus(true);
 

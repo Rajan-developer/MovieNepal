@@ -16,5 +16,6 @@ public interface IMovieController {
 
     void InsertMoviesToDataBase(ArrayList<MovieModel.Result> movieList);
 
-    void UpdateMovieToDataBase(String movieId, String genre, String releasedDate, String duration, String collection, String prodCompany, String prodCountry, String homePageLink);
+    void UpdateMovieToDataBase(String movieId, String genre, String releasedDate, String duration,
+                               String collection, String prodCompany, String prodCountry, String posterPath,String backDropPath, String homePageLink);
 }
