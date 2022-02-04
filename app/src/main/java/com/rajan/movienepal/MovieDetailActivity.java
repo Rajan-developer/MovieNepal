@@ -346,6 +346,10 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
         try {
             belongsToCollection = movieDetail.getBelongs_to_collection().getName();
             movieCollection.setText(belongsToCollection);
+
+            belongsPosterPath = movieDetail.getBelongs_to_collection().getPoster_path();
+            belongsBackDropPath = movieDetail.getBelongs_to_collection().getBackdrop_path();
+
             imagePaths.add(movieDetail.getBelongs_to_collection().getPoster_path());
             imagePaths.add(movieDetail.getBelongs_to_collection().getBackdrop_path());
 
@@ -480,5 +484,12 @@ public class MovieDetailActivity extends AppCompatActivity implements IMovieDeta
                 finish();
                 overridePendingTransition(R.anim.no_animation, R.anim.slide_out_left);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.no_animation, R.anim.slide_out_left);
     }
 }

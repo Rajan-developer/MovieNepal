@@ -14,6 +14,7 @@
         android:theme="@style/Theme.MovieNepal.NoActionBar">
         <activity
             android:name=".MovieActivity"
+            android:screenOrientation="locked"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +24,6 @@
         </activity>
         <activity
             android:name=".MovieDetailActivity"
-            android:configChanges="orientation|screenSize|layoutDirection"
             android:exported="true"></activity>
     </application>
 
