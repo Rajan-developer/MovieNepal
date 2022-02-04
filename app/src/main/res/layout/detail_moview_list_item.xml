@@ -50,24 +50,17 @@
                 android:id="@+id/tv_ratingValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="8.0"
                 android:textColor="@color/white"
                 android:textSize="18sp"></TextView>
 
-            <RatingBar
-                android:id="@+id/reviewer_rating_detail"
-                style="?android:attr/ratingBarStyleSmall"
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_ratingValue"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/tv_ratingValue"
-                android:backgroundTint="@color/white"
-                android:isIndicator="true"
-                android:numStars="1"
-                android:progressTint="@color/missionYellow"
-                android:rating="1"
-                android:secondaryProgress="@color/white" />
+                android:src="@drawable/ic_start"></ImageView>
         </RelativeLayout>
 
     </LinearLayout>

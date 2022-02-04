@@ -76,6 +76,7 @@ public class MovieActivity extends AppCompatActivity implements IMovieView {
                     Intent detailIntent = new Intent(MovieActivity.this, MovieDetailActivity.class);
                     detailIntent.putExtra(MovieDetailActivity.MOVIE_ID, String.valueOf(movie.getId()));
                     startActivity(detailIntent);
+                    overridePendingTransition(R.anim.slide_right,R.anim.no_animation);
                 }
             });
             movieAdapter.addMovie(movieList);

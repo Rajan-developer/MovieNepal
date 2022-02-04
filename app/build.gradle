@@ -52,4 +52,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     testImplementation "android.arch.persistence.room:testing:$room_version"
+
+    //for exo player
+    implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
 }
